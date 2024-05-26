@@ -16,6 +16,11 @@ struct AllBreedsDTO: Decodable {
     let message: [String: [String]]
 }
 
+struct ImageDTO: Decodable {
+    let message: String
+    let status: String
+}
+
 struct ErrorDTO: Decodable {
     let message: String
     let status: String
@@ -58,3 +63,4 @@ enum ResponseDTO<Output: Decodable>: Decodable {
 
 typealias BreedListResponseDTO = ResponseDTO<BreedListDTO>
 typealias AllBreedsResponseDTO = ResponseDTO<AllBreedsDTO>
+typealias RandomImageResponseDTO = ResponseDTO<ImageDTO>

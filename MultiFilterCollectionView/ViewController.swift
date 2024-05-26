@@ -63,7 +63,7 @@ class ViewController: UIViewController {
         collectionView.allowsMultipleSelection = true
         collectionView.delegate = self
         view.backgroundColor = .white
-        title = "MultiFilterCollectionView"
+        title = "Dog Breeds"
         view.addSubview(collectionView)
     }
     
@@ -79,7 +79,7 @@ class ViewController: UIViewController {
     private func createLevelOneCellRegistration() -> UICollectionView.CellRegistration<LevelOneCollectionViewCell, Category> {
         UICollectionView.CellRegistration<LevelOneCollectionViewCell, Category> { [weak self] (cell, indexPath, item) in
             cell.item = item
-            cell.icon = UIImage(systemName: "pawprint")
+            cell.icon = indexPath.row % 2 == 0 ? UIImage(systemName: "pawprint") : UIImage(systemName: "pawprint.fill")
             if item.isSelected {
                 self?.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
             }
@@ -89,7 +89,14 @@ class ViewController: UIViewController {
     private func createLevelTwoCellRegistration() -> UICollectionView.CellRegistration<LevelTwoCollectionViewCell, Breed> {
         UICollectionView.CellRegistration<LevelTwoCollectionViewCell, Breed> { [weak self] (cell, indexPath, item) in
             cell.item = item.breed
-            cell.image = UIImage(systemName: "pawprint")
+            Task {
+                guard let self else { return }
+                if let url = try await self.viewModel.randomImageURL(for: item, service: self.service) {
+                    cell.image = try await ImageManager.shared.getImage(for: url)
+                } else {
+                    cell.image = UIImage(systemName: "pawprint")
+                }
+            }
             cell.position = indexPath.item
             if item.isSelected {
                 self?.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
@@ -100,9 +107,7 @@ class ViewController: UIViewController {
     private func createCardCellRegistration() -> UICollectionView.CellRegistration<CardCollectionViewCell, Image> {
         UICollectionView.CellRegistration<CardCollectionViewCell, Image> { (cell, indexPath, item) in
             Task { @MainActor in
-                let response = try await URLSession.shared.data(for: URLRequest(url: item.url))
-                let image = UIImage(data: response.0)
-                cell.image = image
+                cell.image = try await ImageManager.shared.getImage(for: item.url)
             }
         }
     }
@@ -135,9 +140,9 @@ extension ViewController: UICollectionViewDelegate {
         switch item {
         case .category(let item):
             return item.name != viewModel.selectedCategory
-        case .breed(let breed):
+        case .breed:
             return true
-        case .image(let image):
+        case .image:
             return true
         }
     }
@@ -192,14 +197,4 @@ extension UICollectionView {
             deselectItem(at: index, animated: animated)
         }
     }
-    
-//    func scrollToFirstItemIfAvailable(animated: Bool = false) {
-//        for section in 0..<numberOfSections {
-//            let items = numberOfItems(inSection: section)
-//            if items > 0 {
-//                let firstIndexPath = IndexPath(row: 0, section: section)
-//                scrollToItem(at: firstIndexPath, at: .right, animated: animated)
-//            }
-//        }
-//    }
 }

@@ -15,6 +15,7 @@ enum ServiceError: Error {
 enum Endpoint {
     case breed(String)
     case all
+    case randomImage(String)
     
     var endpoint: String {
         switch self {
@@ -22,6 +23,8 @@ enum Endpoint {
             return "/breed/\(value)/images"
         case .all:
             return "/breeds/list/all"
+        case .randomImage(let value):
+            return "/breed/\(value)/images/random"
         }
     }
 
@@ -47,6 +50,19 @@ struct Service {
         switch decodedValue {
         case .success(let dto):
             return dto
+        case .error(let error):
+            throw ServiceError.response(error)
+        }
+    }
+    
+    func randomImage(breed: String) async throws -> URL? {
+        let url = try Endpoint.randomImage(breed).request(baseUrl: baseURL)
+        let request = URLRequest(url: url)
+        let response = try await session.data(for: request)
+        let decodedValue = try decoder.decode(RandomImageResponseDTO.self, from: response.0)
+        switch decodedValue {
+        case .success(let dto):
+            return URL(string: dto.message)
         case .error(let error):
             throw ServiceError.response(error)
         }

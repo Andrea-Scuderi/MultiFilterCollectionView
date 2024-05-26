@@ -15,8 +15,9 @@ class CardCollectionViewCell: UICollectionViewCell {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .scaleAspectFill
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.clipsToBounds = true
         return view
     }()
 
@@ -41,7 +42,6 @@ class CardCollectionViewCell: UICollectionViewCell {
     }
 
     private func setupView() {
-        imageView.layer.cornerRadius = 16.0
         contentView.addSubview(imageView)
     }
     

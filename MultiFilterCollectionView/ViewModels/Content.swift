@@ -109,10 +109,10 @@ extension Content.Section {
     }
     
     private func buildBreedLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(120), heightDimension: .absolute(120))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(90), heightDimension: .absolute(80))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = .zero
-        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(120), heightDimension: .absolute(120))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(90), heightDimension: .absolute(80))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 4
@@ -122,10 +122,10 @@ extension Content.Section {
     }
     
     private func buildImagesLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(250))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(250))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(0.25))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         return NSCollectionLayoutSection(group: group)
     }
 }

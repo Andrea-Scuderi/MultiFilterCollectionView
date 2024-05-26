@@ -34,7 +34,10 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
     
     private let imageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 8
+        view.layer.borderWidth = 2
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -89,7 +92,7 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
     
     var position: Int? {
         didSet {
-            squirkleColor = (position ?? 0).supportBrand
+            squirkleColor = (position ?? 0).borderColor
         }
     }
     
@@ -243,6 +246,7 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
         label.font = labelStyle()
         selectedView.backgroundColor = .white
         checkboxImage.tintColor = squirkleColor
+        imageView.layer.borderColor = squirkleColor.cgColor
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -252,15 +256,15 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
 }
 
 private extension Int {
-    var supportBrand: UIColor {
+    var borderColor: UIColor {
         let backdrop = self % 6 + 1
         switch backdrop {
         case 1:
-            return .yellow
+            return .red
         case 2:
             return .orange
         case 3:
-            return .cyan
+            return .tintColor
         case 4:
             return .blue
         case 5:

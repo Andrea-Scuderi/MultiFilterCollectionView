@@ -13,6 +13,8 @@ class SectionViewModel {
     // Breed cache
     private var breedDictionary: [String: [URL]] = [:]
     
+    private var randomBreedImagesDictionary: [String: URL] = [:]
+    
     private var categoryList: [Category] = {
         let ranges = [
             "a"..."c",
@@ -41,6 +43,16 @@ class SectionViewModel {
             selectedBreeds.removeAll { $0 == breed }
         } else {
             selectedBreeds.append(breed)
+        }
+    }
+    
+    func randomImageURL(for breed: Breed, service: Service) async throws -> URL? {
+        if let url = randomBreedImagesDictionary[breed.breed] {
+            return url
+        } else {
+            let url = try await service.randomImage(breed: breed.apiKey)
+            randomBreedImagesDictionary[breed.breed] = url
+            return url
         }
     }
     
