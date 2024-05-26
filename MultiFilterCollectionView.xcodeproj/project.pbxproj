@@ -11,7 +11,7 @@
 		9D026CA92BE8BB7200FF4DAE /* DTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D026CA82BE8BB7200FF4DAE /* DTOs.swift */; };
 		9D6183972BC32FDF00EAA7C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6183962BC32FDF00EAA7C8 /* AppDelegate.swift */; };
 		9D6183992BC32FDF00EAA7C8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6183982BC32FDF00EAA7C8 /* SceneDelegate.swift */; };
-		9D61839B2BC32FDF00EAA7C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61839A2BC32FDF00EAA7C8 /* ViewController.swift */; };
+		9D61839B2BC32FDF00EAA7C8 /* MultiFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D61839A2BC32FDF00EAA7C8 /* MultiFilterViewController.swift */; };
 		9D6183A02BC32FE100EAA7C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9D61839F2BC32FE100EAA7C8 /* Assets.xcassets */; };
 		9D6183A32BC32FE100EAA7C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9D6183A12BC32FE100EAA7C8 /* LaunchScreen.storyboard */; };
 		9D6183AE2BC32FE100EAA7C8 /* MultiFilterCollectionViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6183AD2BC32FE100EAA7C8 /* MultiFilterCollectionViewTests.swift */; };
@@ -19,6 +19,7 @@
 		9D6183BA2BC32FE100EAA7C8 /* MultiFilterCollectionViewUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6183B92BC32FE100EAA7C8 /* MultiFilterCollectionViewUITestsLaunchTests.swift */; };
 		9D6183C72BC3373800EAA7C8 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D6183C62BC3373800EAA7C8 /* Content.swift */; };
 		9D84076C2C0372E8003ABD18 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D84076B2C0372E8003ABD18 /* ImageManager.swift */; };
+		9D84076E2C038C82003ABD18 /* SectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D84076D2C038C82003ABD18 /* SectionTitleView.swift */; };
 		BD3CD20B2BF2435B005ECE0E /* LevelOneCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3CD20A2BF2435B005ECE0E /* LevelOneCollectionViewCell.swift */; };
 		BD3CD20D2BF24C28005ECE0E /* CardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3CD20C2BF24C28005ECE0E /* CardCollectionViewCell.swift */; };
 		BD3CD20F2BF253FD005ECE0E /* SectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD3CD20E2BF253FD005ECE0E /* SectionViewModel.swift */; };
@@ -48,7 +49,7 @@
 		9D6183932BC32FDF00EAA7C8 /* MultiFilterCollectionView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiFilterCollectionView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D6183962BC32FDF00EAA7C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9D6183982BC32FDF00EAA7C8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		9D61839A2BC32FDF00EAA7C8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9D61839A2BC32FDF00EAA7C8 /* MultiFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiFilterViewController.swift; sourceTree = "<group>"; };
 		9D61839F2BC32FE100EAA7C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9D6183A22BC32FE100EAA7C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9D6183A42BC32FE100EAA7C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -59,6 +60,7 @@
 		9D6183B92BC32FE100EAA7C8 /* MultiFilterCollectionViewUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiFilterCollectionViewUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		9D6183C62BC3373800EAA7C8 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		9D84076B2C0372E8003ABD18 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
+		9D84076D2C038C82003ABD18 /* SectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionTitleView.swift; sourceTree = "<group>"; };
 		BD3CD20A2BF2435B005ECE0E /* LevelOneCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelOneCollectionViewCell.swift; sourceTree = "<group>"; };
 		BD3CD20C2BF24C28005ECE0E /* CardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCollectionViewCell.swift; sourceTree = "<group>"; };
 		BD3CD20E2BF253FD005ECE0E /* SectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionViewModel.swift; sourceTree = "<group>"; };
@@ -118,10 +120,11 @@
 				BD3CD2102BF2550F005ECE0E /* APIClient */,
 				9D6183962BC32FDF00EAA7C8 /* AppDelegate.swift */,
 				9D6183982BC32FDF00EAA7C8 /* SceneDelegate.swift */,
-				9D61839A2BC32FDF00EAA7C8 /* ViewController.swift */,
+				9D61839A2BC32FDF00EAA7C8 /* MultiFilterViewController.swift */,
 				9D61839F2BC32FE100EAA7C8 /* Assets.xcassets */,
 				9D6183A12BC32FE100EAA7C8 /* LaunchScreen.storyboard */,
 				9D6183A42BC32FE100EAA7C8 /* Info.plist */,
+				9D84076D2C038C82003ABD18 /* SectionTitleView.swift */,
 			);
 			path = MultiFilterCollectionView;
 			sourceTree = "<group>";
@@ -303,7 +306,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD3CD2142BF25C78005ECE0E /* LevelTwoCollectionViewCell.swift in Sources */,
-				9D61839B2BC32FDF00EAA7C8 /* ViewController.swift in Sources */,
+				9D61839B2BC32FDF00EAA7C8 /* MultiFilterViewController.swift in Sources */,
 				9D6183972BC32FDF00EAA7C8 /* AppDelegate.swift in Sources */,
 				9D026CA72BE8BA2A00FF4DAE /* Service.swift in Sources */,
 				BD3CD20B2BF2435B005ECE0E /* LevelOneCollectionViewCell.swift in Sources */,
@@ -313,6 +316,7 @@
 				BD3CD20D2BF24C28005ECE0E /* CardCollectionViewCell.swift in Sources */,
 				9D84076C2C0372E8003ABD18 /* ImageManager.swift in Sources */,
 				9D6183C72BC3373800EAA7C8 /* Content.swift in Sources */,
+				9D84076E2C038C82003ABD18 /* SectionTitleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

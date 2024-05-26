@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MultiFilterViewController.swift
 //  MultiFilterCollectionView
 //
 //  Created by Andrea Scuderi on 07/04/2024.
@@ -7,7 +7,9 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MultiFilterViewController: UIViewController {
+    
+    static let sectionHeaderElementKind = "section-header-element-kind"
     
     var collectionView: UICollectionView!
     var collectionViewLayout: UICollectionViewCompositionalLayout!
@@ -18,7 +20,10 @@ class ViewController: UIViewController {
     func update() async throws {
         let sections = try await viewModel.fetchData(service: service)
         var snapshot = NSDiffableDataSourceSnapshot<Content.Section, Content.Item>()
-        let sectionKeys = sections.keys.sorted { $0.rawValue < $1.rawValue }
+        let sectionKeys = sections.keys.sorted { section0, section1 in
+            guard section0.type == section1.type else { return section0.type.rawValue < section1.type.rawValue }
+            return section0.id < section1.id
+        }
         for sectionKey in sectionKeys {
             if let items = sections[sectionKey] {
                 snapshot.appendSections([sectionKey])
@@ -26,7 +31,7 @@ class ViewController: UIViewController {
             }
         }
         dataSource?.apply(snapshot, animatingDifferences: true, completion: {
-            print("done")
+            print("Apply snapshot completed!")
         })
     }
     
@@ -112,29 +117,43 @@ class ViewController: UIViewController {
         }
     }
     
+    private func headerRegistration() -> UICollectionView.SupplementaryRegistration<SectionTitleView> {
+        UICollectionView.SupplementaryRegistration
+        <SectionTitleView>(elementKind: MultiFilterViewController.sectionHeaderElementKind) { [weak self] (supplementaryView, string, indexPath) in
+            guard let section = self?.dataSource?.sectionIdentifier(for: indexPath.section) else { return }
+            supplementaryView.label.text = section.id
+            supplementaryView.backgroundColor = .white
+        }
+    }
+    
     func makeDataSource() -> UICollectionViewDiffableDataSource<Content.Section, Content.Item> {
         let levelOneRegistration = createLevelOneCellRegistration()
         let levelTwoRegistration = createLevelTwoCellRegistration()
         let cardRegistration = createCardCellRegistration()
+        let headerRegistration = headerRegistration()
+        
         let dataSource = UICollectionViewDiffableDataSource<Content.Section, Content.Item>(
             collectionView: collectionView,
             cellProvider: { (collectionView, indexPath, item) ->
                 UICollectionViewCell? in
                 item.dequeueReusableCell(collectionView: collectionView, levelOneRegistration: levelOneRegistration, levelTwoRegistration: levelTwoRegistration, cardRegistration: cardRegistration, indexPath: indexPath)
             })
+        dataSource.supplementaryViewProvider = { (view, kind, index) in
+            return self.collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: index)
+        }
         return dataSource
     }
 
     func buildCompositionalLayout() -> UICollectionViewCompositionalLayout {
         let sectionProvider: UICollectionViewCompositionalLayoutSectionProvider = { [weak self] section, _ in
             guard let sectionId = self?.dataSource?.sectionIdentifier(for: section) else { return nil }
-            return sectionId.buildLayout()
+            return sectionId.type.buildLayout()
         }
         return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
     }
 }
 
-extension ViewController: UICollectionViewDelegate {
+extension MultiFilterViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
         guard let item = dataSource?.itemIdentifier(for: indexPath) else { return false }
         switch item {

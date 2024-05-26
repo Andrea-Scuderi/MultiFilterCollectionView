@@ -114,22 +114,23 @@ class SectionViewModel {
         let selectedBreedList: [Breed] = selectedBreeds.compactMap { selected in
             breedList.first(where: { selected == $0.breed })
         }
-        
-        var images: [Content.Item] = []
+        var sections: [Content.Section: [Content.Item]] = [
+            Content.Section(id: "categories", type: .category): categories,
+            Content.Section(id: "breed", type: .breed): breeds ?? []
+        ]
         for selected in selectedBreedList {
             if breedDictionary[selected.breed] == nil {
                 let imageList = try await service.fetchBreedList(breed: selected.apiKey).message
                 breedDictionary[selected.breed] = imageList.compactMap({ URL(string: $0) })
             }
             if let items = breedDictionary[selected.breed] {
+                var images: [Content.Item] = []
                 images.append(contentsOf: items.compactMap( { Content.Item.image(Image(url: $0)) }))
+                let section = Content.Section(id: selected.apiKey, type: .images)
+                let maxCount = min(images.count, 8)
+                sections[section] = Array(images[..<maxCount])
             }
         }
-        let sections: [Content.Section: [Content.Item]] = [
-            .category: categories,
-            .breed: breeds ?? [],
-            .images: images
-        ]
         return sections
     }
 }

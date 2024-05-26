@@ -37,10 +37,15 @@ struct Image: Hashable {
 }
 
 struct Content {
-    enum Section: Int, Hashable {
+    enum SectionType: Int, Hashable {
         case category
         case breed
         case images
+    }
+    
+    struct Section: Hashable {
+        var id: String
+        var type: SectionType
     }
     
     enum Item: Hashable {
@@ -84,7 +89,7 @@ extension Content.Item {
     }
 }
 
-extension Content.Section {
+extension Content.SectionType {
     func buildLayout() -> NSCollectionLayoutSection {
         switch self {
         case .category:
@@ -92,7 +97,14 @@ extension Content.Section {
         case .breed:
             return buildBreedLayout()
         case .images:
-            return buildImagesLayout()
+            let section = buildImagesLayout()
+            let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                  heightDimension: .estimated(44)),
+                elementKind: MultiFilterViewController.sectionHeaderElementKind,
+                alignment: .top)
+            section.boundarySupplementaryItems = [sectionHeader]
+            return section
         }
     }
     
