@@ -3,7 +3,6 @@
 import Foundation
 
 class SectionViewModel {
-    private(set) var sections: [Content.Section: [Content.Item]] = [:]
     private(set) var selectedCategory: String = "a-c"
     private(set) var selectedBreeds: [String] = []
     
@@ -29,11 +28,7 @@ class SectionViewModel {
             return Category(name: name, range: $0, isSelected: false)
         }
     }()
-    
-    var sectionKeys: [Content.Section] {
-        sections.keys.sorted { $0.rawValue < $1.rawValue }
-    }
-    
+
     func selectCategory(category: String) {
         selectedCategory = category
         if let firstBreedInCategory = categoryDictionary[category]?.first?.breed {
@@ -79,7 +74,7 @@ class SectionViewModel {
         return categories
     }
     
-    func fetchData(service: Service) async throws {
+    func fetchData(service: Service) async throws -> [Content.Section: [Content.Item]] {
         if breedList.isEmpty {
             breedList = try await loadAllBreedsIfNeeded(service: service)
         }
@@ -118,11 +113,11 @@ class SectionViewModel {
                 images.append(contentsOf: items.compactMap( { Content.Item.image(Image(url: $0)) }))
             }
         }
-
-        sections = [
+        let sections: [Content.Section: [Content.Item]] = [
             .category: categories,
             .breed: breeds ?? [],
             .images: images
         ]
+        return sections
     }
 }

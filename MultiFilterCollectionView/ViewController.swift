@@ -16,12 +16,13 @@ class ViewController: UIViewController {
     var dataSource: UICollectionViewDiffableDataSource<Content.Section, Content.Item>?
     
     func update() async throws {
-        try await viewModel.fetchData(service: service)
+        let sections = try await viewModel.fetchData(service: service)
         var snapshot = NSDiffableDataSourceSnapshot<Content.Section, Content.Item>()
-        for section in viewModel.sectionKeys {
-            if let items = viewModel.sections[section] {
-                snapshot.appendSections([section])
-                snapshot.appendItems(items, toSection: section)
+        let sectionKeys = sections.keys.sorted { $0.rawValue < $1.rawValue }
+        for sectionKey in sectionKeys {
+            if let items = sections[sectionKey] {
+                snapshot.appendSections([sectionKey])
+                snapshot.appendItems(items, toSection: sectionKey)
             }
         }
         dataSource?.apply(snapshot, animatingDifferences: true, completion: {
@@ -121,7 +122,7 @@ class ViewController: UIViewController {
 
     func buildCompositionalLayout() -> UICollectionViewCompositionalLayout {
         let sectionProvider: UICollectionViewCompositionalLayoutSectionProvider = { [weak self] section, _ in
-            guard let sectionId = self?.viewModel.sectionKeys[section] else { return nil }
+            guard let sectionId = self?.dataSource?.sectionIdentifier(for: section) else { return nil }
             return sectionId.buildLayout()
         }
         return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
