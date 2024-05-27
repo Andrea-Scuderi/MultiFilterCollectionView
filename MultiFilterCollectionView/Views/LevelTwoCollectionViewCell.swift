@@ -42,15 +42,6 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private let backgroundImageView: UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFit
-        view.image = UIImage(systemName: "circle.fill")
-        view.tintColor = .clear
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     private let container: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
@@ -88,11 +79,11 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private var squirkleColor: UIColor = .orange
+    private var borderColor: UIColor = .orange
     
     var position: Int? {
         didSet {
-            squirkleColor = (position ?? 0).borderColor
+            borderColor = (position ?? 0).borderColor
         }
     }
     
@@ -103,7 +94,6 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
             } else {
                 accessibilityTraits.remove(.selected)
             }
-            animateOnSelectionChange(completion: nil)
             selectedView.isHidden = !isSelected
             styleView()
         }
@@ -121,23 +111,6 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
     }
     
     private lazy var selectedViewHeightConstraint = selectedView.heightAnchor.constraint(equalToConstant: Constants.selectedSize)
-    
-    func animateOnSelectionChange(completion: ((Bool) -> Void)?) {
-        
-        let initialAlpha: CGFloat = isSelected ? 0 : 1
-        let finalAlpha: CGFloat = isSelected ? 1 : 0
-        let initialHeight: CGFloat = isSelected ? Constants.selectedSize * 0.33 : Constants.selectedSize
-        let finalHeight: CGFloat = isSelected ? Constants.selectedSize : Constants.selectedSize * 0.33
-        let options: UIView.AnimationOptions = isSelected ? .curveEaseIn : .curveEaseOut
-        
-        selectedView.alpha = initialAlpha
-        selectedViewHeightConstraint.constant = initialHeight
-        UIView.animate(withDuration: 0.120, delay: 0.0, options: options, animations: { [weak self] in
-            guard let self else { return }
-            self.selectedView.alpha = finalAlpha
-            self.selectedViewHeightConstraint.constant = finalHeight
-        }, completion: completion)
-    }
     
     var item: String? {
         didSet {
@@ -160,7 +133,6 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
 
     private func setupView() {
         container.alignment = .center
-        imageContainer.addSubview(backgroundImageView)
         imageContainer.addSubview(imageView)
         container.addArrangedSubview(imageContainer)
         container.addArrangedSubview(spacer)
@@ -173,11 +145,6 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            backgroundImageView.centerXAnchor.constraint(equalTo: imageContainer.centerXAnchor),
-            backgroundImageView.centerYAnchor.constraint(equalTo: imageContainer.centerYAnchor),
-            backgroundImageView.widthAnchor.constraint(equalTo: backgroundImageView.heightAnchor, multiplier: Constants.imageWidthHeightRatio),
-            backgroundImageView.heightAnchor.constraint(equalToConstant: Constants.imageSize.height),
-            
             imageView.topAnchor.constraint(equalTo: imageContainer.topAnchor),
             imageView.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
             imageView.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
@@ -217,7 +184,6 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
         label.text = nil
         image = nil
         selectedView.isHidden = true
-        backgroundImageView.tintColor = .clear
         styleView()
     }
     
@@ -241,17 +207,11 @@ final class LevelTwoCollectionViewCell: UICollectionViewCell {
     }
     
     private func styleView() {
-        backgroundImageView.tintColor = squirkleColor
         label.textColor = contentColor()
         label.font = labelStyle()
         selectedView.backgroundColor = .white
-        checkboxImage.tintColor = squirkleColor
-        imageView.layer.borderColor = squirkleColor.cgColor
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        styleView()
+        checkboxImage.tintColor = borderColor
+        imageView.layer.borderColor = borderColor.cgColor
     }
 }
 

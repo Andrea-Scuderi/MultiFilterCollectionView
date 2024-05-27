@@ -30,6 +30,7 @@ class LevelOneCollectionViewCell: UICollectionViewCell {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .lightGray
+        view.layer.cornerRadius = 16.0
         return view
     }()
     
@@ -87,7 +88,6 @@ class LevelOneCollectionViewCell: UICollectionViewCell {
         chipContainer.addArrangedSubview(iconView)
         chipContainer.addArrangedSubview(label)
         container.addSubview(chipContainer)
-        container.layer.cornerRadius = 16.0
         contentView.addSubview(container)
     }
     
@@ -141,10 +141,5 @@ class LevelOneCollectionViewCell: UICollectionViewCell {
         container.backgroundColor = backgroundColor()
         label.textColor = contentColor()
         iconView.tintColor = contentColor()
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        styleView()
     }
 }
