@@ -7,44 +7,23 @@
 
 import UIKit
 
+// MARK: 2 - Setup the View Controller
+
 class MultiFilterViewController: UIViewController {
     
     static let sectionHeaderElementKind = "section-header-element-kind"
     
     var collectionView: UICollectionView!
     var collectionViewLayout: UICollectionViewCompositionalLayout!
-    let service = Service()
+    
+    // Service for data fetching
+    let service: APIServing = Service()
+    
+    // ViewModel for managing data
     let viewModel = SectionViewModel()
+
     var dataSource: UICollectionViewDiffableDataSource<Content.Section, Content.Item>?
     
-    func update() async throws {
-        let sections = try await viewModel.fetchData(service: service)
-        var snapshot = NSDiffableDataSourceSnapshot<Content.Section, Content.Item>()
-        let sectionKeys = sections.keys.sorted { section0, section1 in
-            guard section0.type == section1.type else { return section0.type.rawValue < section1.type.rawValue }
-            return section0.id < section1.id
-        }
-        for sectionKey in sectionKeys {
-            if let items = sections[sectionKey] {
-                snapshot.appendSections([sectionKey])
-                snapshot.appendItems(items, toSection: sectionKey)
-            }
-        }
-        dataSource?.apply(snapshot, animatingDifferences: true, completion: {
-            print("Apply snapshot completed!")
-        })
-    }
-    
-    func updateInBackground() {
-        Task {
-            do {
-                try await update()
-            } catch {
-                print(error)
-            }
-        }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         updateInBackground()
@@ -60,7 +39,11 @@ class MultiFilterViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("Not implemented")
     }
-    
+}
+
+// MARK: 3 - Setup View and Constraints
+
+extension MultiFilterViewController {
     func setupView() {
         collectionViewLayout = buildCompositionalLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
@@ -80,6 +63,11 @@ class MultiFilterViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
         ])
     }
+}
+  
+// MARK: 4 - Create Cell and Supplementary View Registrations
+
+extension MultiFilterViewController {
     
     private func createLevelOneCellRegistration() -> UICollectionView.CellRegistration<LevelOneCollectionViewCell, Category> {
         UICollectionView.CellRegistration<LevelOneCollectionViewCell, Category> { [weak self] (cell, indexPath, item) in
@@ -125,7 +113,11 @@ class MultiFilterViewController: UIViewController {
             supplementaryView.backgroundColor = .white
         }
     }
-    
+}
+
+// MARK: 5 - Configure the Data Source
+
+extension MultiFilterViewController {
     func makeDataSource() -> UICollectionViewDiffableDataSource<Content.Section, Content.Item> {
         let levelOneRegistration = createLevelOneCellRegistration()
         let levelTwoRegistration = createLevelTwoCellRegistration()
@@ -143,7 +135,11 @@ class MultiFilterViewController: UIViewController {
         }
         return dataSource
     }
+}
 
+// MARK: 6 - Build the Compositional Layout
+
+extension MultiFilterViewController {
     func buildCompositionalLayout() -> UICollectionViewCompositionalLayout {
         let sectionProvider: UICollectionViewCompositionalLayoutSectionProvider = { [weak self] section, _ in
             guard let sectionId = self?.dataSource?.sectionIdentifier(for: section) else { return nil }
@@ -152,6 +148,41 @@ class MultiFilterViewController: UIViewController {
         return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
     }
 }
+
+// MARK: 7 - Fetch and Update Data
+
+extension MultiFilterViewController {
+    
+    func update() async throws {
+        let sections = try await viewModel.fetchData(service: service)
+        var snapshot = NSDiffableDataSourceSnapshot<Content.Section, Content.Item>()
+        let sectionKeys = sections.keys.sorted { section0, section1 in
+            guard section0.type == section1.type else { return section0.type.rawValue < section1.type.rawValue }
+            return section0.id < section1.id
+        }
+        for sectionKey in sectionKeys {
+            if let items = sections[sectionKey] {
+                snapshot.appendSections([sectionKey])
+                snapshot.appendItems(items, toSection: sectionKey)
+            }
+        }
+        dataSource?.apply(snapshot, animatingDifferences: true, completion: {
+            print("Apply snapshot completed!")
+        })
+    }
+    
+    func updateInBackground() {
+        Task {
+            do {
+                try await update()
+            } catch {
+                print(error)
+            }
+        }
+    }
+}
+
+// MARK: 8 - Handle Selection with Delegate Methods
 
 extension MultiFilterViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
@@ -174,7 +205,7 @@ extension MultiFilterViewController: UICollectionViewDelegate {
             viewModel.selectCategory(category: item.name)
             updateInBackground()
         case .breed(let breed):
-            viewModel.selectBreed(breed: breed.breed)
+            viewModel.toggleBreed(breed: breed.breed)
             updateInBackground()
         case .image(let image):
             print(image)
@@ -187,13 +218,15 @@ extension MultiFilterViewController: UICollectionViewDelegate {
         case .category(let category):
             print(category)
         case .breed(let breed):
-            viewModel.selectBreed(breed: breed.breed)
+            viewModel.toggleBreed(breed: breed.breed)
             updateInBackground()
         case .image(let image):
             print(image)
         }
     }
 }
+
+// MARK: 9 - Add Helper Methods for Selection Management
 
 extension UICollectionView {
     func deselectAllInSection(section: Int, animated: Bool) {

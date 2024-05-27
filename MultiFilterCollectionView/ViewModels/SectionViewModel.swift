@@ -38,7 +38,7 @@ class SectionViewModel {
         }
     }
     
-    func selectBreed(breed: String) {
+    func toggleBreed(breed: String) {
         if selectedBreeds.contains(breed) {
             selectedBreeds.removeAll { $0 == breed }
         } else {
@@ -46,7 +46,7 @@ class SectionViewModel {
         }
     }
     
-    func randomImageURL(for breed: Breed, service: Service) async throws -> URL? {
+    func randomImageURL(for breed: Breed, service: APIServing) async throws -> URL? {
         if let url = randomBreedImagesDictionary[breed.breed] {
             return url
         } else {
@@ -56,7 +56,7 @@ class SectionViewModel {
         }
     }
     
-    private func loadAllBreedsIfNeeded(service: Service) async throws -> [Breed] {
+    private func loadAllBreedsIfNeeded(service: APIServing) async throws -> [Breed] {
         var allBreeds: [Breed] = []
         let allBreedsDTO = try await service.fetchAllBreeds()
         for (key, value) in allBreedsDTO.message {
@@ -86,7 +86,7 @@ class SectionViewModel {
         return categories
     }
     
-    func fetchData(service: Service) async throws -> [Content.Section: [Content.Item]] {
+    func fetchData(service: APIServing) async throws -> [Content.Section: [Content.Item]] {
         if breedList.isEmpty {
             breedList = try await loadAllBreedsIfNeeded(service: service)
         }
