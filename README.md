@@ -9,4 +9,4 @@ Requirements:
 
 This tutorial will guide you through creating a collection view with multiple filterable sections using `UICollectionViewDiffableDataSource` and `UICollectionViewCompositionalLayout`.
 
-![Multi-Filter Collection View](MultiFilterCollectionViewDemo.mov)
+![Multi-Filter Collection View](MultiFilterCollectionViewDemo.gif)
