@@ -1,8 +1,6 @@
-//
 //  Content.swift
-//  MultiFilterCollectionView
 //
-//  Created by Andrea Scuderi on 07/04/2024.
+//  Copyright (c) 2024 Andrea Scuderi
 //
 
 import Foundation

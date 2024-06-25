@@ -1,4 +1,7 @@
 //  CardCollectionViewCell.swift
+//
+//  Copyright (c) 2024 Andrea Scuderi
+//
 
 import Foundation
 import UIKit
