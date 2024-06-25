@@ -72,7 +72,7 @@ extension MultiFilterViewController {
     private func createLevelOneCellRegistration() -> UICollectionView.CellRegistration<LevelOneCollectionViewCell, Category> {
         UICollectionView.CellRegistration<LevelOneCollectionViewCell, Category> { [weak self] (cell, indexPath, item) in
             cell.item = item
-            cell.icon = indexPath.row % 2 == 0 ? UIImage(systemName: "pawprint") : UIImage(systemName: "pawprint.fill")
+            cell.icon = indexPath.row.isMultiple(of: 2) ? UIImage(systemName: "pawprint") : UIImage(systemName: "pawprint.fill")
             if item.isSelected {
                 self?.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
             }
@@ -82,7 +82,7 @@ extension MultiFilterViewController {
     private func createLevelTwoCellRegistration() -> UICollectionView.CellRegistration<LevelTwoCollectionViewCell, Breed> {
         UICollectionView.CellRegistration<LevelTwoCollectionViewCell, Breed> { [weak self] (cell, indexPath, item) in
             cell.item = item.breed
-            Task {
+            Task { @MainActor in
                 guard let self else { return }
                 if let url = try await self.viewModel.randomImageURL(for: item, service: self.service) {
                     cell.image = try await ImageManager.shared.getImage(for: url)
